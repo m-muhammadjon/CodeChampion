@@ -22,7 +22,7 @@ ALLOWED_HOSTS = []  # type: ignore
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -30,6 +30,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+CUSTOM_APPS = [
+    "src.users",
+]
+
+THIRD_PARTY_APPS = []  # type: ignore
+
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
+
+AUTH_USER_MODEL = "users.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
