@@ -1,0 +1,12 @@
+.profile {
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+    padding: 10px;
+}
+.profile img{
+    max-width: 300px;
+    height: 300px;
+
+}
+.stats{
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+}

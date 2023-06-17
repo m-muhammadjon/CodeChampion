@@ -1,0 +1,27 @@
+.search-in input:focus{
+    box-shadow: none!important;
+    outline: none!important;
+    border: 1px solid #1535d7;
+}
+
+.main-navbar .nav-item{
+    margin: 0 5px;
+}
+
+.main-navbar .nav-link{
+    font-size: 16px!important;
+}
+
+.main-navbar .nav-link:hover{
+    color: #1535d7!important;
+}
+
+.main-navbar .active{
+    background-color: #1535d7;
+    color: #fff!important;
+    border-radius: 5px;
+}
+
+.main-navbar .active .nav-link{
+    color: #fff!important;
+}

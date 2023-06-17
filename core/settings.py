@@ -32,10 +32,12 @@ DJANGO_APPS = [
 ]
 
 CUSTOM_APPS = [
-    "src.users",
+    "apps.users",
 ]
 
-THIRD_PARTY_APPS = []  # type: ignore
+THIRD_PARTY_APPS = [
+    "social_django",
+]  # type: ignore
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
@@ -49,6 +51,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
+]
+
+# SITE_ID = 1
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.github.GithubOAuth2",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -64,6 +73,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
             ],
         },
     },
@@ -138,3 +148,34 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 HOST = env.str("HOST", "localhost:8000")
+
+# DJANGO RESIZED IMAGE FIELDS
+DJANGORESIZED_DEFAULT_SIZE = [1920, 1080]
+DJANGORESIZED_DEFAULT_QUALITY = 100
+DJANGORESIZED_DEFAULT_KEEP_META = True
+DJANGORESIZED_DEFAULT_FORCE_FORMAT = "WEBP"
+DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {"WEBP": ".webp"}
+DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
+
+LOGIN_REDIRECT_URL = "/"
+
+SOCIALACCOUNT_PROVIDERS = {  # noqa
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+    },
+    "github": {
+        "SCOPE": [
+            "user",
+            "repo",
+        ],
+    },
+}
+
+SOCIAL_AUTH_GITHUB_KEY = "7e992e3fb9db0187bfcf"
+SOCIAL_AUTH_GITHUB_SECRET = "aba751dc3eb971b56cb723e989d7a2eb0b987df6"

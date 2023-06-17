@@ -1,0 +1,14 @@
+.stat-box{
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+    padding: 30px;
+    margin: 10px;
+    width: 47%;
+}
+.stat-icon{
+    font-size: 50px;
+    margin-right: 15px;
+}
+.active-users{
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+    padding: 30px;
+}

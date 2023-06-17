@@ -1,0 +1,74 @@
+.contest-navbar {
+    padding: 10px;
+
+}
+
+
+.contest-navbar a:hover {
+    background: #1535d7;
+    color: #fff !important;
+}
+
+
+.active {
+    background-color: #1535d7 !important;
+    color: #fff !important;
+}
+
+.contest-info {
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+    padding: 30px;
+}
+
+.contest-info td {
+    padding: 15px;
+}
+
+.language {
+    padding: 5px 10px;
+    margin: 0 2px;
+    background-color: #1535d7 !important;
+    color: #fff !important;
+    border-radius: 20px;
+}
+
+.problem-item {
+    background: #fff;
+    border: #1535d7 1px solid;
+    border-radius: 5px;
+    padding: 2px 10px;
+}
+
+.problem-item:hover {
+    background: #1535d7;
+    color: #fff;
+}
+
+.problem-item:hover * {
+    color: #fff;
+}
+
+.problem-symbol {
+    font-size: 20px;
+}
+
+.problem-standing {
+    min-width: 85px !important;
+}
+
+
+.standings-table {
+    overflow-x: auto;
+}
+
+.standings-table tbody td {
+    vertical-align: middle;
+}
+
+table.standings-table .me {
+    background-color: lightgreen;
+}
+
+.first-solved {
+    background: #eef4ed !important;
+}

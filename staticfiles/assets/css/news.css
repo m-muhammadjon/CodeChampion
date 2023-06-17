@@ -1,0 +1,23 @@
+.new{
+    padding: 30px 35px!important;
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+}
+
+.near-contests{
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+    padding: 20px 25px;
+}
+
+.recent-actions{
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
+    padding: 20px 25px;
+}
+
+.about-new-recent{
+    color: #000;
+}
+
+.about-new-recent:hover{
+    color: #000;
+    text-decoration: none;  
+}

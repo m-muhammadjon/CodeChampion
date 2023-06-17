@@ -1,0 +1,103 @@
+@import 'topheader.css';
+@import 'navbar.css';
+@import 'news.css';
+@import 'contest.css';
+@import "problem.css";
+@import "home.css";
+@import "profile.css";
+
+/* including fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+a {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+a:hover {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+.bg-blue {
+    background-color: #1535d7;
+    color: #fff !important;
+}
+
+
+.btn {
+    padding: 10px 30px !important;
+    outline: none;
+}
+
+.black {
+    color: #000;
+}
+
+.btn-outline-blue {
+    background-color: #fff;
+    border: 1px solid #1535d7;
+    color: #1535d7;
+}
+
+.btn-outline-blue:hover {
+    background-color: #1535d7;
+    color: #fff !important;
+}
+
+.btn-blue:hover {
+    background-color: #fff;
+    color: #1535d7 !important;
+    border: 1px solid #1535d7;
+}
+
+.blue {
+    color: #1535d7 !important;
+}
+
+.blue:hover {
+    color: #1535d7 !important;
+}
+
+.btn:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.wrong {
+    color: #d71515 !important;
+}
+
+.blue-hover:hover {
+    color: #1535d7 !important;
+}
+
+.accepted, .green {
+    color: #00bc8c !important
+}
+
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    .btn {
+        padding: 5px 10px !important;
+    }
+
+    .top-header img {
+        width: 100px;
+    }
+}
+
