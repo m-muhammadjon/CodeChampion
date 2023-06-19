@@ -6,10 +6,6 @@ from django.shortcuts import redirect, render
 from apps.users.forms import LoginForm
 
 
-def home(request: WSGIRequest) -> HttpResponse:
-    return render(request, "home.html")
-
-
 def logout_view(request: WSGIRequest) -> HttpResponse:
     logout(request)
     return redirect("users:home")

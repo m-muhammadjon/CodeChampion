@@ -5,7 +5,6 @@ from apps.users import views
 app_name = "users"
 
 urlpatterns = [
-    path("", views.home, name="home"),
     path("logout/", views.logout_view, name="logout"),
     path("login/", views.login_view, name="login"),
     # path("login/github/", views.github_login, name="github_login"),
