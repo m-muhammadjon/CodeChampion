@@ -23,6 +23,7 @@ ALLOWED_HOSTS = []  # type: ignore
 # Application definition
 
 DJANGO_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -35,11 +36,14 @@ CUSTOM_APPS = [
     "apps.users",
     "apps.common",
     "apps.base",
+    "apps.problems",
 ]
 
 THIRD_PARTY_APPS = [
     "social_django",
-]  # type: ignore
+    "ckeditor",
+    "ckeditor_uploader",
+]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
@@ -209,3 +213,11 @@ SOCIAL_AUTH_PIPELINE = (
 
 SOCIAL_AUTH_GITHUB_KEY = "7e992e3fb9db0187bfcf"
 SOCIAL_AUTH_GITHUB_SECRET = "aba751dc3eb971b56cb723e989d7a2eb0b987df6"
+
+CKEDITOR_UPLOAD_PATH = "ckeditor"
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",
+    }
+}

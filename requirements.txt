@@ -4,5 +4,6 @@ django-environ==0.10.0
 pre-commit==3.2.2
 django-resized==1.0.2
 pillow==9.5.0
-==0.7.28
 social-auth-app-django==5.2.0
+django-ckeditor==6.5.1
+django-jazzmin==2.6.0

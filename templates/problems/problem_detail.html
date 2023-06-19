@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ problem.title }}{% endblock %}
+{% block style %}
+    <!-- codemirror -->
+    <link rel="stylesheet" href="{% static 'codemirror-5.65.13/lib/codemirror.css' %}">
+    <link rel="stylesheet" href="{% static 'codemirror-5.65.13/theme/dracula.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container mb-5">
+        <div class="row main">
+            <div class="col-lg-12">
+                <div class="mt-5 mb-4">
+                    <div class="problem">
+                        {% include 'problems/problem_navbar.html' %}
+                        <div class="problem-info">
+                            <h3>{{ problem.id }}. {{ problem.title }}</h3>
+                            <div class="requirements">
+                                <span class="time-limit border rounded-3">Vaqt: {{ problem.time_limit }} ms</span>
+                                <span class="memory-limit border rounded-3">Xotira: {{ problem.memory_limit }} mb</span>
+                                <span class="difficulty border rounded-3">Qiyinchiligi: {{ problem.difficulty }} %</span>
+                            </div>
+
+                            <p class="problem-description border">
+
+                                {{ problem.description|safe }}
+
+                            </p>
+                            <p class="input text-primary">Kiruvchi ma'lumotlar:</p>
+                            <p class="input-data  border-bottom">
+                                {{ problem.input_data|safe }}
+                            </p>
+                            <p class="input text-primary">Chiquvchi ma'lumotlar:</p>
+                            <p class="input-data  border-bottom">
+                                {{ problem.output_data|safe }}
+                            </p>
+                            <p class="input text-primary">Misollar:</p>
+                            <table class="table table-bordered border-primary">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="width: 40px" class="text-center">#</th>
+                                    <th scope="col">input.txt</th>
+                                    <th scope="col">output.txt</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for test in problem.sample_test_cases.all %}
+                                    <tr>
+                                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                        <td class="position-relative"><span>{{ test.input }}</span>
+                                            <button class="test-copy"><i class="fal fa-copy"></i></button>
+                                        </td>
+                                        <td class="position-relative"><span>{{ test.output }}</span>
+                                            <button class="test-copy"><i class="fal fa-copy"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="submit-code">
+            <!--        <p>Ushbu masalani yuborish uchun tizimga <a href="./login.html" class="blue">kiring.</a></p>-->
+            <form action="{{ problem.get_submission_url }}" method="post">
+                {% csrf_token %}
+                <div>
+                    <select name="language" class="form-select" aria-label="Default select example" id="language">
+                        <option selected>Dasturlash tilini tanlang:</option>
+                        {% for language in languages %}
+                            <option value="{{ language.id }}">{{ language.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="editor"></label><textarea name="source_code" id="editor" rows="10" cols="50"
+                                                          class="mt-2"></textarea>
+                    <button type="submit" class="submit-btn mt-3 btn btn-primary">Yuborish</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'codemirror-5.65.13/lib/codemirror.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/mode/python/python.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/mode/clike/clike.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/addon/edit/closetag.js' %}"></script>
+    <script>
+        let myeditor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+            mode: '',
+            lineNumbers: true
+        })
+        let languageSelector = document.getElementById('language');
+        let langs_json = {{ langs_json|safe }};
+        languageSelector.addEventListener('change', function () {
+            let selectedLanguage = langs_json[languageSelector.value];
+            let code = ''
+            if (selectedLanguage === 'python') {
+                code = 'python';
+            } else if (selectedLanguage === 'cpp' || selectedLanguage === 'java') {
+                code = 'text/x-csrc';
+            }
+            myeditor.setOption('mode', code);
+
+
+        });
+    </script>
+{% endblock %}

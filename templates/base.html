@@ -58,30 +58,30 @@
 
         <div class="collapse navbar-collapse main-navbar" id="navbarTogglerDemo02">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active ">
+                <li class="nav-item {% if name == 'main' %}active{% endif %}">
                     <a class="nav-link btn" href="/">Bosh sahifa </a>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link btn" href="#">Kurslar</a>
+                {#                <li class="nav-item ">#}
+                {#                    <a class="nav-link btn" href="#">Kurslar</a>#}
+                {#                </li>#}
+                <li class="nav-item {% if name == 'problems' %}active{% endif %}">
+                    <a class="nav-link btn" href="{% url 'problems:problem_list' %}">Masalalar</a>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link btn" href="./problems.html">Masalalar</a>
-                </li>
-                <li class="nav-item ">
+                <li class="nav-item {% if name == 'attempts' %}active{% endif %}">
                     <a class="nav-link btn" href="./attempts.html">Urinishlar</a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item {% if name == 'contests' %}active{% endif %}">
                     <a class="nav-link btn" href="./contests.html">Musobaqalar</a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item {% if name == 'users' %}active{% endif %}">
                     <a class="nav-link btn" href="./users.html">Reyting</a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item {% if name == 'blog' %}active{% endif %}">
                     <a class="nav-link btn" href="#">Blog</a>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link btn" href="#">Guruhlar</a>
-                </li>
+{#                <li class="nav-item ">#}
+{#                    <a class="nav-link btn" href="#">Guruhlar</a>#}
+{#                </li>#}
             </ul>
         </div>
     </div>
