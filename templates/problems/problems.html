@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Masalalar | Code Champion{% endblock %}
+{% block content %}
+    <table class="table table-bordered container mt-5">
+        <thead class="bg-blue">
+        <tr>
+            <th scope="col">Tartib raqami</th>
+            <th scope="col">Nomi</th>
+            <th scope="col">Qiyinchiligi</th>
+            <th scope="col">Toifasi</th>
+            <th scope="col">Yechganlar soni</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for problem in problems %}
+            <tr>
+                <th scope="row"><a href="{{ problem.get_absolute_url }}" class="blue">{{ problem.id }}</a></th>
+                <td><a href="{{ problem.get_absolute_url }}" class="blue">{{ problem.title }}</a></td>
+                <td>{{ problem.difficulty }} %</td>
+                <td>{% for tag in problem.tags.all %}<a href="" class="blue">{{ tag }}</a> &nbsp;{% endfor %}</td>
+                <td>{{ problem.solved_users_count }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

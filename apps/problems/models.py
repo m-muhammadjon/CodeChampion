@@ -1,6 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from apps.base.managers import ActiveManager
@@ -52,7 +53,14 @@ class Problem(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("problems:problem_detail", args=[self.pk])
+
+    def get_submission_url(self):
+        return reverse("problems:submit_problem", args=[self.pk])
+
     class Meta:
+        ordering = ("id",)
         verbose_name = _("Problem")
         verbose_name_plural = _("Problems")
 

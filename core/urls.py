@@ -7,7 +7,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("social-auth/", include("social_django.urls", namespace="social")),
     path("", include("apps.users.urls", namespace="users")),
+    path("", include("apps.problems.urls", namespace="problems")),
 ]
+urlpatterns += [
+    path("ckeditor/", include("ckeditor_uploader.urls")),
+]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
