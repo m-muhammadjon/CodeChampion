@@ -68,7 +68,7 @@
                     <a class="nav-link btn" href="{% url 'problems:problem_list' %}">Masalalar</a>
                 </li>
                 <li class="nav-item {% if name == 'attempts' %}active{% endif %}">
-                    <a class="nav-link btn" href="./attempts.html">Urinishlar</a>
+                    <a class="nav-link btn" href="{% url 'problems:attempt_list' %}">Urinishlar</a>
                 </li>
                 <li class="nav-item {% if name == 'contests' %}active{% endif %}">
                     <a class="nav-link btn" href="./contests.html">Musobaqalar</a>

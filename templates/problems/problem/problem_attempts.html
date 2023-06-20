@@ -52,7 +52,7 @@
                                                 <a href="" class="blue-hover">{{ attempt.user.username }}</a>
                                             </td>
                                             <td class="attempt-problem">
-                                                <a href="#" class="blue-hover">{{ attempt.problem.title }}</a></td>
+                                                <a href="{{ attempt.problem.get_absolute_url }}" class="blue-hover">{{ attempt.problem.title }}</a></td>
                                             <td class="attempt-language">{{ attempt.language }}</td>
                                             <td class="attempt-verdict
                                                 {% if attempt.verdict == 'accepted' %}accepted

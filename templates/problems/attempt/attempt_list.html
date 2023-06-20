@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Urinishlar{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <table class="table table-striped mt-3 table-blue">
+            <thead>
+            <tr class="table-primary">
+                <th>ID</th>
+                <th>Foydalanuvchi</th>
+                <th>Masala</th>
+                <th>Til</th>
+                <th>Holati</th>
+                <th>Vaqt</th>
+                <th>Xotira</th>
+                <th>Yuborilgan</th>
+            </thead>
+            <tbody>
+            {% for attempt in attempts %}
+                <tr>
+                    <td class="attempt-id">
+                        {% if request.user == attempt.user %}
+                            <a href="{{ attempt.get_absolute_url }}" class="blue">{{ attempt.id }}</a>
+                        {% else %}
+                            {{ attempt.id }}
+                        {% endif %}
+                    </td>
+                    <td class="attempt-user">
+                        <a href="" class="blue-hover">{{ attempt.user.username }}</a>
+                    </td>
+                    <td class="attempt-problem">
+                        <a href="{{ attempt.problem.get_absolute_url }}"
+                           class="blue-hover">{{ attempt.problem.title }}</a></td>
+                    <td class="attempt-language">{{ attempt.language.short_name }}</td>
+                    <td class="attempt-verdict {% if attempt.verdict == 'accepted' %}accepted
+                                               {% elif attempt.verdict == 'waiting' %}text-dark
+                                               {% else %}wrong
+                                               {% endif %}">
+                        {{ attempt.get_final_verdict }}
+                    </td>
+                    <td class="attempt-time">{{ attempt.time }} ms</td>
+                    <td class="attempt-memory">{{ attempt.memory }} KB</td>
+                    <td class="attempt-created">{{ attempt.created_at|date:"d.m.Y h:m" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

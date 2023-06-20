@@ -10,3 +10,4 @@ django-jazzmin==2.6.0
 channels==4.0.0
 daphne==4.0.0
 django-filter==23.2
+django-ratelimit==4.0.0
