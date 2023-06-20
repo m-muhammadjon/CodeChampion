@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import Exists, OuterRef
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -12,7 +13,11 @@ from apps.problems.models import Attempt, Problem
 
 
 def problem_list(request: WSGIRequest) -> HttpResponse:
-    problems = Problem.active.all()
+    request_user = request.user if request.user.is_authenticated else None
+    problems = Problem.active.annotate(
+        is_solved=Exists(Attempt.objects.filter(problem_id=OuterRef("id"), user=request_user, verdict="accepted")),
+        is_attempted=Exists(Attempt.objects.filter(problem_id=OuterRef("id"), user=request_user)),
+    ).all()
     return render(request, "problems/problem/problems.html", {"problems": problems, "name": "problems"})
 
 
