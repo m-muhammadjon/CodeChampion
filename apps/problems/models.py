@@ -109,7 +109,7 @@ class Attempt(TimeStampedModel):
         "common.ProgrammingLanguage", on_delete=models.CASCADE, related_name="attempts", verbose_name=_("language")
     )
     source_code = models.TextField(_("source code"))
-    uuid = models.UUIDField(_("uuid"), editable=False)
+    uuid = models.UUIDField(_("uuid"), editable=False, null=True)
     verdict = models.CharField(_("verdict"), max_length=32, choices=AttemptVerdictChoices.choices, default="waiting")
     time = models.PositiveIntegerField(_("time"), default=0)
     memory = models.PositiveIntegerField(_("memory"), default=0)

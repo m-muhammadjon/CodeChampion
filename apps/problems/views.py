@@ -36,11 +36,10 @@ def problem_detail(request: WSGIRequest, pk: int) -> HttpResponse:
 def submit_problem(request: WSGIRequest, pk: int) -> HttpResponse:
     print(request.POST)
     form = AttemptForm(request.POST)
-    print(form.is_valid())
-    print(form.errors)
-    # if form.is_valid():
-    #     attempt = form.save(commit=False)
-    #     attempt.user = request.user
-    #     attempt.save()
-    #     return HttpResponse("Submission keldi")
+    if form.is_valid():
+        attempt = form.save(commit=False)
+        attempt.user = request.user
+        attempt.problem_id = pk
+        attempt.save()
+        return HttpResponse("Submission keldi")
     return HttpResponse("okay")

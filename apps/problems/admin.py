@@ -43,3 +43,4 @@ class AttemptAdmin(admin.ModelAdmin):
     list_display = ("user", "problem", "verdict", "time", "memory")
     list_filter = ("verdict", "problem")
     search_fields = ("user__username", "problem__title")
+    readonly_fields = ("uuid",)
