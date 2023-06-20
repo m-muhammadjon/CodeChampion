@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %} Urinishlar masala {% endblock %}
+{% block content %}
+    <div class="container mb-5">
+        <div class="row main">
+            <div class="col-lg-12">
+                <div class="mt-5 mb-4">
+                    <div class="problem">
+                        <div class="btn-group mb-2 problem-navbar" role="group" aria-label="Basic outlined example">
+                            <a href="{{ attempts.first.problem.get_absolute_url }}"
+                               class="btn btn-outline-primary {% if sub_name == 'problem' %}active{% endif %}">Masala</a>
+                            <a class="btn btn-outline-primary {% if sub_name == 'attempts' %}active{% endif %}">Urinishlar</a>
+                            <a href=""
+                               class="btn btn-outline-primary {% if sub_name == 'statistic' %}active{% endif %}">Statistika</a>
+                        </div>
+                        <div class="attempts">
+                            {% if request.user.is_authenticated %}
+                                <form method="get" id="filter-form">
+
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" name="mine" type="checkbox"
+                                               id="flexSwitchCheckDefault">
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">Mening
+                                            urinishlarim</label>
+                                    </div>
+                                </form>
+                            {% endif %}
+                            <div>
+                                <table class="table table-striped mt-3 table-blue">
+                                    <thead>
+                                    <tr class="table-primary">
+                                        <th>ID</th>
+                                        <th>Foydalanuvchi</th>
+                                        <th>Masala</th>
+                                        <th>Til</th>
+                                        <th>Holati</th>
+                                        <th>Vaqt</th>
+                                        <th>Xotira</th>
+                                        <th>Yuborilgan</th>
+                                    </thead>
+                                    <tbody>
+                                    {% for attempt in attempts %}
+                                        <tr>
+                                            <td class="attempt-id">
+                                                {% if request.user == attempt.user %}
+                                                    <a href="{{ attempt.get_absolute_url }}" class="blue">{{ attempt.id }}</a>
+                                                {% else %}
+                                                    {{ attempt.id }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="attempt-user">
+                                                <a href="" class="blue-hover">{{ attempt.user.username }}</a>
+                                            </td>
+                                            <td class="attempt-problem">
+                                                <a href="#" class="blue-hover">{{ attempt.problem.title }}</a></td>
+                                            <td class="attempt-language">{{ attempt.language }}</td>
+                                            <td class="attempt-verdict
+                                                {% if attempt.verdict == 'accepted' %}accepted
+                                                {% elif attempt.verdict == 'waiting' %}text-dark
+                                                {% else %}wrong{% endif %}">
+                                                {{ attempt.get_final_verdict }}
+                                            </td>
+                                            <td class="attempt-time">{{ attempt.time }} ms</td>
+                                            <td class="attempt-memory">{{ attempt.memory }} KB</td>
+                                            <td class="attempt-created">{{ attempt.created_at|date:"d.m.Y h:m" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterForm = document.getElementById('filter-form');
+            const filterInputs = filterForm.querySelectorAll('input');
+
+            let mine_checkbox = document.getElementById('flexSwitchCheckDefault');
+            if (window.location.search.includes('mine=true')) {
+                mine_checkbox.checked = true;
+            }
+
+            // Add event listener to each input field
+            filterInputs.forEach(function (input) {
+                input.addEventListener('change', function () {
+                    window.location.href = window.location.protocol + '//' + window.location.host + window.location.pathname + '?mine=' + input.checked;
+                });
+            });
+        });
+    </script>
+{% endblock %}

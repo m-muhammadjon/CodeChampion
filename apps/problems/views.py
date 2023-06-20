@@ -1,17 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from apps.common.models import ProgrammingLanguage
+from apps.problems.filters import AttemptFilter
 from apps.problems.forms import AttemptForm
-from apps.problems.models import Problem
+from apps.problems.models import Attempt, Problem
 
 
 def problem_list(request: WSGIRequest) -> HttpResponse:
     problems = Problem.active.all()
-    return render(request, "problems/problems.html", {"problems": problems, "name": "problems"})
+    return render(request, "problems/problem/problems.html", {"problems": problems, "name": "problems"})
 
 
 def problem_detail(request: WSGIRequest, pk: int) -> HttpResponse:
@@ -20,7 +22,7 @@ def problem_detail(request: WSGIRequest, pk: int) -> HttpResponse:
 
     return render(
         request,
-        "problems/problem_detail.html",
+        "problems/problem/problem_detail.html",
         {
             "problem": problem,
             "languages": languages,
@@ -34,12 +36,28 @@ def problem_detail(request: WSGIRequest, pk: int) -> HttpResponse:
 @require_POST
 @login_required
 def submit_problem(request: WSGIRequest, pk: int) -> HttpResponse:
-    print(request.POST)
     form = AttemptForm(request.POST)
     if form.is_valid():
         attempt = form.save(commit=False)
         attempt.user = request.user
         attempt.problem_id = pk
         attempt.save()
-        return HttpResponse("Submission keldi")
+        return redirect(f"{reverse('problems:problem_attempts', args=(pk,))}?mine=true")
     return HttpResponse("okay")
+
+
+def problem_attempts(request: WSGIRequest, pk: int) -> HttpResponse:
+    attempts = AttemptFilter(request.GET, Attempt.objects.filter(problem_id=pk), request=request)
+    attempts = attempts.qs
+    return render(
+        request,
+        "problems/problem/problem_attempts.html",
+        {"attempts": attempts, "name": "problems", "sub_name": "attempts"},
+    )
+
+
+def attempt_detail(request: WSGIRequest, pk: int) -> HttpResponse:
+    attempt = Attempt.objects.get(pk=pk)
+    if request.user != attempt.user:
+        return redirect("base:home")  # TODO: move to attempts list
+    return render(request, "problems/attempt/attempt_detail.html", {"attempt": attempt, "name": "attempts"})

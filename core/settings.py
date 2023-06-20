@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = [
     "social_django",
     "ckeditor",
     "ckeditor_uploader",
+    "django_filters",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
