@@ -16,4 +16,4 @@ def set_uuid(sender, instance, **kwargs) -> None:
 @receiver(post_save, sender=Attempt)
 def check_submission(sender, instance, created, **kwargs) -> None:
     if created:
-        check_attempt(instance.id)
+        check_attempt.delay(instance.id)
