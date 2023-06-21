@@ -10,3 +10,5 @@ def check_attempt(attempt_id: int) -> None:
 
     if language.short_name == "cpp":
         submission_result = check_cpp(attempt_id)  # noqa
+
+    attempt.update_problem_statistics()
