@@ -12,7 +12,13 @@
             <div class="col-lg-12">
                 <div class="mt-5 mb-4">
                     <div class="problem">
-                        {% include 'problems/problem_navbar.html' %}
+                        <div class="btn-group mb-2 problem-navbar" role="group" aria-label="Basic outlined example">
+                            <a class="btn btn-outline-primary {% if sub_name == 'problem' %}active{% endif %}">Masala</a>
+                            <a href="{% url 'problems:problem_attempts' problem.id %}"
+                               class="btn btn-outline-primary {% if sub_name == 'attempts' %}active{% endif %}">Urinishlar</a>
+                            <a href=""
+                               class="btn btn-outline-primary {% if sub_name == 'statistic' %}active{% endif %}">Statistika</a>
+                        </div>
                         <div class="problem-info">
                             <h3>{{ problem.id }}. {{ problem.title }}</h3>
                             <div class="requirements">
@@ -65,22 +71,25 @@
 
         </div>
         <div class="submit-code">
-            <!--        <p>Ushbu masalani yuborish uchun tizimga <a href="./login.html" class="blue">kiring.</a></p>-->
-            <form action="{{ problem.get_submission_url }}" method="post">
-                {% csrf_token %}
-                <div>
-                    <select name="language" class="form-select" aria-label="Default select example" id="language">
-                        <option selected>Dasturlash tilini tanlang:</option>
-                        {% for language in languages %}
-                            <option value="{{ language.id }}">{{ language.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="editor"></label><textarea name="source_code" id="editor" rows="10" cols="50"
-                                                          class="mt-2"></textarea>
-                    <button type="submit" class="submit-btn mt-3 btn btn-primary">Yuborish</button>
+            {% if not request.user.is_authenticated %}
+                <p>Ushbu masalani yuborish uchun tizimga <a href="{% url 'users:login' %}" class="blue">kiring.</a></p>
+            {% else %}
+                <form action="{{ problem.get_submission_url }}" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <select name="language" class="form-select" aria-label="Default select example" id="language">
+                            <option selected>Dasturlash tilini tanlang:</option>
+                            {% for language in languages %}
+                                <option value="{{ language.id }}">{{ language.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="editor"></label><textarea name="source_code" id="editor" rows="10" cols="50"
+                                                              class="mt-2"></textarea>
+                        <button type="submit" class="submit-btn mt-3 btn btn-primary">Yuborish</button>
 
-                </div>
-            </form>
+                    </div>
+                </form>
+            {% endif %}
         </div>
 
     </div>

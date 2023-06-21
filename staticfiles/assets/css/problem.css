@@ -87,6 +87,25 @@
 
 
 .table-blue th {
-    background: #1535d7!important;
-    color: #fff!important;
+    background: #1535d7 !important;
+    color: #fff !important;
+}
+
+.copy-code {
+    padding: 5px;
+    margin-bottom: 15px;
+    width: 40px;
+    background: #1535d7;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 30px;
+    color: #fff;
+}
+
+.copy-code:hover {
+    cursor: pointer;
+}
+
+.errors{
+    box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
 }

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Urinish #{{ attempt.id }}{% endblock %}
+{% block style %}
+    <!-- codemirror -->
+    <link rel="stylesheet" href="{% static 'codemirror-5.65.13/lib/codemirror.css' %}">
+    <link rel="stylesheet" href="{% static 'codemirror-5.65.13/theme/dracula.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container mb-5">
+        <div class="attempt-info mt-5">
+            <table class="table table-borderless">
+                <thead class="table-blue">
+                <tr>
+                    <th>ID</th>
+                    <th>Yuborilgan sana</th>
+                    <th>Foydalanuvchi</th>
+                    <th>Masala</th>
+                    <th>Til</th>
+                    <th>Holati</th>
+                    <th>Vaqt</th>
+                    <th>Xotira</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="border-bottom">
+                    <td>{{ attempt.id }}</td>
+                    <td>{{ attempt.created_at|date:"d.m.Y h:m" }}</td>
+
+                    <td>{{ attempt.user.username }}</td>
+                    <td><a href="{{ attempt.problem.get_absolute_url }}" class="blue">{{ attempt.problem.title }}</a>
+                    </td>
+                    <td>{{ attempt.language.short_name }}</td>
+                    <td class="{% if attempt.verdict == 'accepted' %}accepted{% elif attempt.verdict == 'waiting' %}text-dark{% else %}wrong{% endif %}">{{ attempt.get_final_verdict }}</td>
+                    <td>{{ attempt.time }} ms</td>
+                    <td>{{ attempt.memory }} KB</td>
+                </tbody>
+            </table>
+        </div>
+        <div class="source-code">
+            <div class="copy-code">
+                <i class="fa-light fa-clipboard"></i>
+            </div>
+            <textarea name="" id="editor" disabled>{{ attempt.source_code }}</textarea>
+        </div>
+        {% if attempt.verdict == 'compilation_error' %}
+            <div class="mt-4 p-3 errors">
+                <pre class="wrong">{{ attempt.error|linebreaks }}</pre>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'codemirror-5.65.13/lib/codemirror.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/mode/python/python.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/mode/clike/clike.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/addon/edit/closetag.js' %}"></script>
+    <script>
+        let lang = '{{ attempt.language.short_name }}';
+        if (lang === 'cpp') {
+            lang = 'text/x-csrc';
+        }
+        let myeditor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+            mode: lang,
+            lineNumbers: true,
+            readOnly: true
+        })
+
+        $('.copy-code').click(function () {
+            console.log('clicked');
+            navigator.clipboard.writeText(document.getElementById('editor').value);
+        })
+    </script>
+{% endblock %}

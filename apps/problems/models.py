@@ -116,15 +116,19 @@ class Attempt(TimeStampedModel):
     # contest = models.ForeignKey("contests.Contest", on_delete=models.CASCADE, related_name="attempts",
     #                             verbose_name=_("contest"), null=True, blank=True)
     error = models.TextField(_("error"), null=True, blank=True)
-    error_test_case = models.PositiveIntegerField(_("error test case"), null=True, blank=True)
+    error_test_case = models.PositiveIntegerField(_("error test case"), default=0)
     is_checked = models.BooleanField(_("is checked"), default=False)
 
     def __str__(self):
         return f"Attempt of {self.user.username} on {self.problem.title}"
 
     class Meta:
+        ordering = ["-created_at"]
         verbose_name = _("Attempt")
         verbose_name_plural = _("Attempts")
+
+    def get_absolute_url(self):
+        return reverse("problems:attempt_detail", args=[self.pk])
 
     def get_final_verdict(self) -> str:
         if self.is_checked and self.error_test_case != 0:
@@ -133,8 +137,9 @@ class Attempt(TimeStampedModel):
 
     def update_problem_statistics(self) -> None:
         problem = self.problem
-        problem.solved_users_count = (
-            Attempt.objects.filter(problem=problem, verdict=AttemptVerdictChoices.accepted).distinct("user").count()
+        print(Attempt.objects.filter(problem=problem, verdict=AttemptVerdictChoices.accepted))
+        problem.solved_users_count = len(
+            problem.attempts.filter(verdict=AttemptVerdictChoices.accepted).distinct("user")
         )
         problem.accepted_submissions_count = Attempt.objects.filter(
             problem=problem, verdict=AttemptVerdictChoices.accepted

@@ -68,7 +68,7 @@
                     <a class="nav-link btn" href="{% url 'problems:problem_list' %}">Masalalar</a>
                 </li>
                 <li class="nav-item {% if name == 'attempts' %}active{% endif %}">
-                    <a class="nav-link btn" href="./attempts.html">Urinishlar</a>
+                    <a class="nav-link btn" href="{% url 'problems:attempt_list' %}">Urinishlar</a>
                 </li>
                 <li class="nav-item {% if name == 'contests' %}active{% endif %}">
                     <a class="nav-link btn" href="./contests.html">Musobaqalar</a>
@@ -79,9 +79,9 @@
                 <li class="nav-item {% if name == 'blog' %}active{% endif %}">
                     <a class="nav-link btn" href="#">Blog</a>
                 </li>
-{#                <li class="nav-item ">#}
-{#                    <a class="nav-link btn" href="#">Guruhlar</a>#}
-{#                </li>#}
+                {#                <li class="nav-item ">#}
+                {#                    <a class="nav-link btn" href="#">Guruhlar</a>#}
+                {#                </li>#}
             </ul>
         </div>
     </div>
@@ -95,7 +95,11 @@
 <footer class="mt-5">
     <div class="container d-flex justify-content-between">
         <div>Code Champion &copy; 2023</div>
-        <div><p>Platform powered by <a href="" class="blue">Muhammadjon</a></p></div>
+        <div>
+            <p>
+                Platform powered by <a href="https://t.me/m_muhammadjon" target="_blank" class="blue">Muhammadjon</a>
+            </p>
+        </div>
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>

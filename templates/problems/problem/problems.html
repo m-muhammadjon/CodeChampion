@@ -13,7 +13,7 @@
         </thead>
         <tbody>
         {% for problem in problems %}
-            <tr>
+            <tr class="{% if problem.is_attempted and problem.is_solved %}table-success{% elif problem.is_attempted and not problem.is_solved %}table-danger{% endif %}">
                 <th scope="row"><a href="{{ problem.get_absolute_url }}" class="blue">{{ problem.id }}</a></th>
                 <td><a href="{{ problem.get_absolute_url }}" class="blue">{{ problem.title }}</a></td>
                 <td>{{ problem.difficulty }} %</td>
