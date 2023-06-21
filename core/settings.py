@@ -23,6 +23,7 @@ ALLOWED_HOSTS = []  # type: ignore
 # Application definition
 
 DJANGO_APPS = [
+    "daphne",
     "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -88,6 +89,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = "core.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+            "capacity": 1500,
+            "expiry": 10,
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -222,3 +235,10 @@ CKEDITOR_CONFIGS = {
         "toolbar": "full",
     }
 }
+
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://localhost:6379")
+CELERY_RESULT_BACKEND = env.str("CELERY_BROKER_URL", "redis://localhost:6379")
+
+CELERY_TIMEZONE = "Asia/Tashkent"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

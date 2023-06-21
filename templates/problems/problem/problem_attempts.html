@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %} Urinishlar masala {% endblock %}
 {% block content %}
     <div class="container mb-5">
@@ -40,10 +41,11 @@
                                     </thead>
                                     <tbody>
                                     {% for attempt in attempts %}
-                                        <tr>
+                                        <tr id="attempt-{{ attempt.id }}">
                                             <td class="attempt-id">
                                                 {% if request.user == attempt.user %}
-                                                    <a href="{{ attempt.get_absolute_url }}" class="blue">{{ attempt.id }}</a>
+                                                    <a href="{{ attempt.get_absolute_url }}"
+                                                       class="blue">{{ attempt.id }}</a>
                                                 {% else %}
                                                     {{ attempt.id }}
                                                 {% endif %}
@@ -52,7 +54,8 @@
                                                 <a href="" class="blue-hover">{{ attempt.user.username }}</a>
                                             </td>
                                             <td class="attempt-problem">
-                                                <a href="{{ attempt.problem.get_absolute_url }}" class="blue-hover">{{ attempt.problem.title }}</a></td>
+                                                <a href="{{ attempt.problem.get_absolute_url }}"
+                                                   class="blue-hover">{{ attempt.problem.title }}</a></td>
                                             <td class="attempt-language">{{ attempt.language }}</td>
                                             <td class="attempt-verdict
                                                 {% if attempt.verdict == 'accepted' %}accepted
@@ -93,5 +96,9 @@
                 });
             });
         });
+
+
+        const user_id = "{{ request.user.id }}";
     </script>
+    <script src="{% static 'assets/js/socket.js' %}"></script>
 {% endblock %}

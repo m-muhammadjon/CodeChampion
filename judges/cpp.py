@@ -7,7 +7,7 @@ from apps.problems.models import Attempt, AttemptVerdictChoices, TestCase
 # import psutil
 
 
-# from apps.base.websocket import send_attempt_info_to_group
+from apps.base.websocket import send_attempt_info_to_group
 
 
 def check_cpp(attempt_id: int) -> bool:
@@ -19,6 +19,7 @@ def check_cpp(attempt_id: int) -> bool:
     f.close()
     # for i in [["attempt", "attempt.message"], [f"{attempt.user.id}", "user_submission_info"]]:
     #     send_attempt_info_to_group(i[0], i[1], False, attempt_id, "Compiling", 0, 0, False)
+    send_attempt_info_to_group(attempt.user_id, False, attempt_id, "Compiling", 0, 0, False)
 
     p1 = subprocess.run(f"g++ files/attempt/{uid}.cpp -o files/attempt/{uid}.exe", capture_output=True, shell=True)
     if p1.stderr:
@@ -29,6 +30,7 @@ def check_cpp(attempt_id: int) -> bool:
         os.remove(f"files/attempt/{uid}.cpp")
         # for i in [["attempt", "attempt.message"], [f"{attempt.user.id}", "user_submission_info"]]:
         #     send_attempt_info_to_group(i[0], i[1], False, attempt_id, "Compilation error", 0, 0, True)
+        send_attempt_info_to_group(attempt.user_id, False, attempt_id, "Compilation error", 0, 0, True)
         return False
     else:
         k = 0
@@ -53,6 +55,7 @@ def check_cpp(attempt_id: int) -> bool:
             #     send_attempt_info_to_group(
             #         i[0], i[1], False, attempt_id, f"Running #{k}", 0, int(0 / 1024), False
             #     )
+            send_attempt_info_to_group(attempt.user_id, False, attempt_id, f"Running #{k}", 0, int(0 / 1024), False)
             try:
                 stdout, stderr = p2.communicate(input, timeout=attempt.problem.time_limit / 1000)
                 end = time.time()
@@ -77,6 +80,8 @@ def check_cpp(attempt_id: int) -> bool:
                     #         int(0 / 1024),
                     #         True,
                     #     )
+                    send_attempt_info_to_group(attempt.user_id, False, attempt_id, f"Runtime error #{k}", max_time,
+                                               int(0 / 1024), True)
                     return False
                 else:
                     # if memory > submission.problem.memory_limit * 1024 * 1024:
@@ -121,6 +126,8 @@ def check_cpp(attempt_id: int) -> bool:
                         #         int(0 / 1024),
                         #         True,
                         #     )
+                        send_attempt_info_to_group(attempt.user_id, False, attempt_id, f"Wrong answer #{k}", max_time,
+                                                   int(0 / 1024), True)
                         return False
 
             except subprocess.TimeoutExpired:
@@ -145,6 +152,8 @@ def check_cpp(attempt_id: int) -> bool:
                 #         int(0 / 1024),
                 #         True,
                 #     )
+                send_attempt_info_to_group(attempt.user_id, False, attempt_id, f"Time limit #{k}", max_time,
+                                           int(0 / 1024), True)
                 return False
         attempt.verdict = AttemptVerdictChoices.accepted
         attempt.time = max_time
@@ -157,6 +166,7 @@ def check_cpp(attempt_id: int) -> bool:
         #     send_attempt_info_to_group(
         #         i[0], i[1], False, attempt_id, "Accepted", max_time, int(0 / 1024), True
         #     )
+        send_attempt_info_to_group(attempt.user_id, False, attempt_id, "Accepted", max_time, int(0 / 1024), True)
         return True
 
 
