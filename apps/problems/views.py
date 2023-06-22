@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Exists, OuterRef
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -13,7 +14,7 @@ from apps.problems.forms import AttemptForm
 from apps.problems.models import Attempt, Problem
 
 
-@ratelimit(key="ip", rate="10/m")
+@ratelimit(key="ip", rate="10/s")
 def problem_list(request: WSGIRequest) -> HttpResponse:
     request_user = request.user if request.user.is_authenticated else None
     problems = Problem.active.annotate(
@@ -54,8 +55,14 @@ def submit_problem(request: WSGIRequest, pk: int) -> HttpResponse:
 
 
 def problem_attempts(request: WSGIRequest, pk: int) -> HttpResponse:
-    attempts = AttemptFilter(request.GET, Attempt.objects.filter(problem_id=pk), request=request)
-    attempts = attempts.qs
+    queryset = AttemptFilter(request.GET, Attempt.objects.filter(problem_id=pk), request=request).qs
+    paginator = Paginator(queryset, 10)
+    page = request.GET.get("page")
+    try:
+        attempts = paginator.page(page)
+    except (PageNotAnInteger, EmptyPage):
+        attempts = paginator.page(1)
+
     return render(
         request,
         "problems/problem/problem_attempts.html",
@@ -64,7 +71,14 @@ def problem_attempts(request: WSGIRequest, pk: int) -> HttpResponse:
 
 
 def attempt_list(request: WSGIRequest) -> HttpResponse:
-    attempts = Attempt.objects.all()
+    all_submissions = Attempt.objects.all()
+    paginator = Paginator(all_submissions, 20)
+    page = request.GET.get("page")
+    try:
+        attempts = paginator.page(page)
+    except (PageNotAnInteger, EmptyPage):
+        attempts = paginator.page(1)
+
     return render(request, "problems/attempt/attempt_list.html", {"attempts": attempts, "name": "attempts"})
 
 

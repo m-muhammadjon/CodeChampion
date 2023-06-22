@@ -5,45 +5,71 @@
     <div class="container">
         <table class="table table-striped mt-3 table-blue">
             <thead>
-            <tr class="table-primary">
-                <th>ID</th>
-                <th>Foydalanuvchi</th>
-                <th>Masala</th>
-                <th>Til</th>
-                <th>Holati</th>
-                <th>Vaqt</th>
-                <th>Xotira</th>
-                <th>Yuborilgan</th>
-            </thead>
-            <tbody>
-            {% for attempt in attempts %}
-                <tr>
-                    <td class="attempt-id">
-                        {% if request.user == attempt.user %}
-                            <a href="{{ attempt.get_absolute_url }}" class="blue">{{ attempt.id }}</a>
+                <tr class="table-primary">
+                    <th>ID</th>
+                    <th>Foydalanuvchi</th>
+                    <th>Masala</th>
+                    <th>Til</th>
+                    <th>Holati</th>
+                    <th>Vaqt</th>
+                    <th>Xotira</th>
+                    <th>Yuborilgan</th>
+                </thead>
+                <tbody>
+                    {% for attempt in attempts %}
+                        <tr>
+                            <td class="attempt-id">
+                                {% if request.user == attempt.user %}
+                                    <a href="{{ attempt.get_absolute_url }}" class="blue">{{ attempt.id }}</a>
+                                {% else %}
+                                    {{ attempt.id }}
+                                {% endif %}
+                            </td>
+                            <td class="attempt-user">
+                                <a href="" class="blue-hover">{{ attempt.user.username }}</a>
+                            </td>
+                            <td class="attempt-problem">
+                                <a href="{{ attempt.problem.get_absolute_url }}"
+                                   class="blue-hover">{{ attempt.problem.title }}</a></td>
+                            <td class="attempt-language">{{ attempt.language.short_name }}</td>
+                            <td class="attempt-verdict {% if attempt.verdict == 'accepted' %}accepted
+                                       {% elif attempt.verdict == 'waiting' %}text-dark
+                                       {% else %}wrong
+                                       {% endif %}">
+                                {{ attempt.get_final_verdict }}
+                            </td>
+                            <td class="attempt-time">{{ attempt.time }} ms</td>
+                            <td class="attempt-memory">{{ attempt.memory }} KB</td>
+                            <td class="attempt-created">{{ attempt.created_at|date:"d.m.Y h:m" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item {% if not attempts.has_previous %}disabled{% endif %}">
+                        {% if attempts.has_previous %}
+                            <a class="page-link blue" href="?page={{ attempts.previous_page_number }}">Previous</a>
                         {% else %}
-                            {{ attempt.id }}
+                            <span class="page-link">Previous</span>
                         {% endif %}
-                    </td>
-                    <td class="attempt-user">
-                        <a href="" class="blue-hover">{{ attempt.user.username }}</a>
-                    </td>
-                    <td class="attempt-problem">
-                        <a href="{{ attempt.problem.get_absolute_url }}"
-                           class="blue-hover">{{ attempt.problem.title }}</a></td>
-                    <td class="attempt-language">{{ attempt.language.short_name }}</td>
-                    <td class="attempt-verdict {% if attempt.verdict == 'accepted' %}accepted
-                                               {% elif attempt.verdict == 'waiting' %}text-dark
-                                               {% else %}wrong
-                                               {% endif %}">
-                        {{ attempt.get_final_verdict }}
-                    </td>
-                    <td class="attempt-time">{{ attempt.time }} ms</td>
-                    <td class="attempt-memory">{{ attempt.memory }} KB</td>
-                    <td class="attempt-created">{{ attempt.created_at|date:"d.m.Y h:m" }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                    </li>
+                {#                <li class="page-item"><a class="page-link" href="#">1</a></li>#}
+                {#                <li class="page-item active">#}
+                {#                                  <span class="page-link">#}
+                {#                                    2#}
+                {#                                    <span class="sr-only">(current)</span>#}
+                {#                                  </span>#}
+                {#                </li>#}
+                {#                <li class="page-item"><a class="page-link" href="#">3</a></li>#}
+                    <li class="page-item {% if not attempts.has_next %}disabled{% endif %}">
+                        {% if attempts.has_next %}
+                            <a class="page-link blue" href="?page={{ attempts.next_page_number }}">Next</a>
+                        {% else %}
+                            <span class="page-link">Next</span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </div>
 {% endblock %}
