@@ -114,6 +114,11 @@
             let mine_checkbox = document.getElementById('flexSwitchCheckDefault');
             if (window.location.search.includes('mine=true')) {
                 mine_checkbox.checked = true;
+                const nextLink = document.querySelectorAll('a.page-link');
+                nextLink.forEach(function (link) {
+                    link.href = link.href + '&mine=true';
+                });
+
             }
 
             // Add event listener to each input field
