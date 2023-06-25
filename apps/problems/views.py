@@ -66,7 +66,7 @@ def problem_attempts(request: WSGIRequest, pk: int) -> HttpResponse:
     return render(
         request,
         "problems/problem/problem_attempts.html",
-        {"attempts": attempts, "name": "problems", "sub_name": "attempts"},
+        {"attempts": attempts, "name": "problems", "sub_name": "attempts", "problem_id": pk},
     )
 
 
