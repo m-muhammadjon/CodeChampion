@@ -38,6 +38,7 @@ CUSTOM_APPS = [
     "apps.common",
     "apps.base",
     "apps.problems",
+    "apps.contests",
 ]
 
 THIRD_PARTY_APPS = [
