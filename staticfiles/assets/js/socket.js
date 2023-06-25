@@ -1,9 +1,9 @@
-console.log(window.location.pathname);
+let ws_url = "";
 if (window.location.pathname.match(/\/problems\/(\d+)\/attempts/)) {
-    let ws_url = `ws://${window.location.host}/ws/user-socket/${user_id}`;
+    ws_url = `ws://${window.location.host}/ws/user-socket/${user_id}`;
 
 } else if (window.location.pathname === "/attempts") {
-    let ws_url = `ws://${window.location.host}/ws/attempt-socket`;
+    ws_url = `ws://${window.location.host}/ws/attempt-socket`;
 }
 const socket = new WebSocket(ws_url);
 
@@ -16,23 +16,28 @@ socket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     let attempt = `tr#attempt-${data["attempt_id"]}`;
     if (data["created"] === true) {
-        // $(`<tr id="attempt-${data['attempt_id']}">
-        //     <td class="attempt-id">
-        //         ${request_user_id === data['user_id'] ? `<a href="/attempts/${data['attempt_id']}" class="blue">${'attempt_id'}</a>` : data['attempt_id']}
-        //     </td>
-        //     <td class="attempt-user">
-        //         <a href="" class="blue-hover">USER</a>
-        //     </td>
-        //     <td class="attempt-problem">
-        //         <a href="" class="blue-hover">PROBLEM</a></td>
-        //     <td class="attempt-language">LANGUAGE</td>
-        //     <td class="attempt-verdict text-dark">
-        //         Waiting
-        //     </td>
-        //     <td class="attempt-time">0 ms</td>
-        //     <td class="attempt-memory">0 KB</td>
-        //     <td class="attempt-created">${data['created']}</td>
-        // </tr>`.insertAfter("thead"));
+        let element = $(`<tr id="attempt-${data['attempt_id']}">
+            <td class="attempt-id">
+                ${request_user_id === data['user_id'] ? `<a href="/attempts/${data['attempt_id']}" class="blue">${data["attempt_id"]}</a>` : data["attempt_id"]}
+            </td>
+            <td class="attempt-user">
+                <a href="" class="blue-hover">${data['username']}</a>
+            </td>
+            <td class="attempt-problem">
+                <a href="" class="blue-hover">${data['problem_title']}</a></td>
+            <td class="attempt-language">${data['language']}</td>
+            <td class="attempt-verdict text-dark">
+                ${data['status']}
+            </td>
+            <td class="attempt-time">0 ms</td>
+            <td class="attempt-memory">0 KB</td>
+            <td class="attempt-created">${data['created_at']}</td>
+        </tr>`);
+        element.prependTo("tbody");
+
+        // Remove the last item of tbody
+        $("tbody tr").last().remove();
+
     }
 
     if (data["is_finished"] === true) {

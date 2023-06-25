@@ -8,12 +8,13 @@
                 <div class="mt-5 mb-4">
                     <div class="problem">
                         <div class="btn-group mb-2 problem-navbar" role="group" aria-label="Basic outlined example">
-                            <a href="{{ attempts.first.problem.get_absolute_url }}"
+                            <a href="{% url 'problems:problem_detail' problem_id %}"
                                class="btn btn-outline-primary {% if sub_name == 'problem' %}active{% endif %}">Masala</a>
                             <a class="btn btn-outline-primary {% if sub_name == 'attempts' %}active{% endif %}">Urinishlar</a>
                             <a href=""
                                class="btn btn-outline-primary {% if sub_name == 'statistic' %}active{% endif %}">Statistika</a>
                         </div>
+                        {{ attempts }}
                         <div class="attempts">
                             {% if request.user.is_authenticated %}
                                 <form method="get" id="filter-form">
@@ -65,7 +66,7 @@
                                                     </td>
                                                     <td class="attempt-time">{{ attempt.time }} ms</td>
                                                     <td class="attempt-memory">{{ attempt.memory }} KB</td>
-                                                    <td class="attempt-created">{{ attempt.created_at|date:"d.m.Y h:m" }}</td>
+                                                    <td class="attempt-created">{{ attempt.created_at|date:"d.m.Y H:i" }}</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
