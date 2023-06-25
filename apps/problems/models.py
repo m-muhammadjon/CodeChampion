@@ -137,9 +137,11 @@ class Attempt(TimeStampedModel):
 
     def update_problem_statistics(self) -> None:
         problem = self.problem
-        print(Attempt.objects.filter(problem=problem, verdict=AttemptVerdictChoices.accepted))
-        problem.solved_users_count = len(
-            problem.attempts.filter(verdict=AttemptVerdictChoices.accepted).distinct("user")
+        problem.solved_users_count = (
+            Attempt.objects.filter(problem=problem, verdict=AttemptVerdictChoices.accepted)
+            .order_by("user")
+            .distinct("user")
+            .count()
         )
         problem.accepted_submissions_count = Attempt.objects.filter(
             problem=problem, verdict=AttemptVerdictChoices.accepted
