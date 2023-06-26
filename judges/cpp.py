@@ -112,7 +112,7 @@ def check_cpp(attempt_id: int) -> bool:
                 os.remove(f"files/attempt/{uid}.cpp")
                 os.remove(f"files/attempt/{uid}.exe")
                 send_attempt_info_to_group(
-                    attempt.user_id, False, attempt_id, f"Time limit #{k}", max_time, int(0 / 1024), True
+                    attempt.user_id, False, attempt_id, f"Time limit exceeded #{k}", max_time, int(0 / 1024), True
                 )
                 return False
         attempt.verdict = AttemptVerdictChoices.accepted

@@ -11,8 +11,8 @@ class Contest(TimeStampedModel):
     end_date = models.DateTimeField()
     penalty_per_attempt = models.IntegerField(default=5)
     programming_languages = models.ManyToManyField("common.ProgrammingLanguage", related_name="contests")
-
     is_private = models.BooleanField(default=False)
+    is_rated = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -67,13 +67,13 @@ class ContestantProblemInfo(TimeStampedModel):
     class Meta:
         ordering = ["contest_problem__symbol"]
 
-    def get_clean_solved_time(self):
+    def get_clean_solved_time(self) -> str:
         if not self.is_solved:
-            return None
+            return ""
         date = self.solved_at - self.contestant.contest.start_date
         return f"{date.days * 24 + date.seconds // 3600:02d}:{(date.seconds // 60) % 60:02d}:{date.seconds % 60:02d}"
 
-    def get_clean_attempts_count(self):
+    def get_clean_attempts_count(self) -> str:
         if not self.is_solved:
             if self.attempt_count == 1:
                 return "-"
