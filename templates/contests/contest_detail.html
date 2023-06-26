@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}{{ contest.title }} | Code Champion{% endblock %}
+{% block content %}
+    <div class="container mb-5">
+        <div class="row main">
+            <div class="col-lg-12">
+                <div class="mt-5 mb-4">
+                    <div class="contest">
+                        <div class="mb-2 d-flex justify-content-between">
+                            <div class="btn-group contest-navbar" role="group" aria-label="Basic outlined example">
+                                <a href="#" class="btn btn-outline-primary active">Musobaqa</a>
+                                <a href="" class="btn btn-outline-primary ">Masalalar</a>
+                                <a href="" class="btn btn-outline-primary ">Natijalar</a>
+                                <a href="" class="btn btn-outline-primary ">Urinishlar</a>
+                                <a href="" class="btn btn-outline-primary ">Qatnashuvchilar</a>
+                            </div>
+
+                            <div><i class="fa-light fa-clock fa-fade"></i> <span>01:15:23</span></div>
+                        </div>
+                        <div class="contest-info">
+                            <h2>{{ contest.title }}</h2>
+                            <p>{{ contest.description|safe }}</p>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Holati</b></td>
+                                        <td>
+                                            <p class="{% if contest.status == -1 %}blue{% elif contest.status == 1 %}wrong{% else %}accepted{% endif %}">
+                                                {% if contest.status == -1 %}
+                                                    Boshlanmagan
+                                                {% elif contest.status == 1 %}
+                                                    Tugagan
+                                                {% else %}
+                                                    O'tkazilmoqda
+                                                {% endif %}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Boshlanish vaqti</b></td>
+                                        <td><span>{{ contest.start_date|date:"H:i d.m.Y" }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Tugash vaqti</b></td>
+                                        <td><span>{{ contest.end_date|date:"H:i d.m.Y" }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Davomiyligi</b></td>
+                                        <td><span>{{ contest.duration }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Masalalar soni</b></td>
+                                        <td><span>{{ contest.problems.count }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Qatnashuvchilar</b></td>
+                                        <td><span>{{ contest.participants.count }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Dasturlash tillari</b></td>
+                                        <td>
+                                            {% for language in contest.programming_languages.all %}
+                                                <span class="language">{{ language.name }}</span>
+                                            {% endfor %}
+                                        </td>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <a href="#" class="btn btn-primary btn-blue bg-blue">Qatnashish</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+{% endblock %}

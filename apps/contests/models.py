@@ -1,5 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
+from django.urls import reverse
+from django.utils import timezone
 
 from apps.base.models import TimeStampedModel
 
@@ -16,6 +18,25 @@ class Contest(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def duration(self) -> timezone:
+        return self.end_date - self.start_date
+
+    @property
+    def status(self) -> int:
+        """
+        :return: -1 if contest has not started yet, 0 if contest is running, 1 if contest has ended
+        """
+        if self.start_date > timezone.now():
+            return -1
+        elif self.end_date < timezone.now():
+            return 1
+        else:
+            return 0
+
+    def get_absolute_url(self):
+        return reverse("contests:contest_detail", args=(self.pk,))
 
 
 class ContestParticipant(TimeStampedModel):
