@@ -71,7 +71,9 @@
 }
 
 .test-copy {
-    position: absolute;
+    position: absolute !important;
+    top: 50%;
+    transform: translateY(-50%);
     right: 10px;
     border: none;
     padding: 2px 5px;
@@ -106,6 +108,6 @@
     cursor: pointer;
 }
 
-.errors{
+.errors {
     box-shadow: 1px 1px 28px 1px rgb(0 0 0 / 30%);
 }

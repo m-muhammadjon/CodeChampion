@@ -38,6 +38,9 @@ class Contest(TimeStampedModel):
     def get_absolute_url(self):
         return reverse("contests:contest_detail", args=(self.pk,))
 
+    def get_register_contest_url(self):
+        return reverse("contests:register_contest", args=(self.pk,))
+
 
 class ContestParticipant(TimeStampedModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="participated_contests")
@@ -63,6 +66,9 @@ class ContestProblem(TimeStampedModel):
     class Meta:
         ordering = ["symbol"]
         unique_together = ["contest", "symbol"]
+
+    def get_absolute_url(self):
+        return reverse("contests:contest_problem", args=(self.contest.pk, self.symbol))
 
 
 class Contestant(TimeStampedModel):

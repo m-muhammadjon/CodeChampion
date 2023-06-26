@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Masala - {{ problem.symbol }} | Code Champion{% endblock %}
+{% block style %}
+    <!-- codemirror -->
+    <link rel="stylesheet" href="{% static 'codemirror-5.65.13/lib/codemirror.css' %}">
+    <link rel="stylesheet" href="{% static 'codemirror-5.65.13/theme/dracula.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container mb-5">
+        <div class="row main">
+            <div class="col-lg-12">
+                <div class="mt-5 mb-4">
+                    <div class="contest">
+                        <div class="mb-2 d-flex justify-content-between">
+                            <div class="btn-group contest-navbar" role="group" aria-label="Basic outlined example">
+                                <a href="{{ contest.get_absolute_url }}" class="btn btn-outline-primary">Musobaqa</a>
+                                <a href="" class="btn btn-outline-primary active">Masalalar</a>
+                                <a href="./contest_standings.html" class="btn btn-outline-primary ">Natijalar</a>
+                                <a href="./contest_attempts.html" class="btn btn-outline-primary ">Urinishlar</a>
+                                <a href="" class="btn btn-outline-primary ">Qatnashuvchilar</a>
+                            </div>
+                            {% if now < contest.end_date %}
+                                <div><i class="fa-light fa-clock fa-fade"></i> <span id="countdown"></span></div>
+                            {% endif %}                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 d-flex flex-column">
+                    {% for contest_problem in problems %}
+                        <a href="{{ contest_problem.get_absolute_url }}"
+                           class="problem-item d-flex flex-column align-items-center mb-1 {% if contest_problem == problem %}active{% endif %}">
+                            <div class="problem-symbol">{{ contest_problem.symbol }}</div>
+                            <div><i class="fa-light fa-star"></i> {{ contest_problem.point }}</div>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="col-11">
+                    <div class="problem-info">
+                        <h3>{{ problem.symbol }}. {{ problem.problem.title }}</h3>
+                        <div class="requirements">
+                            <span class="time-limit border rounded-3">Vaqt: {{ problem.problem.time_limit }} ms</span>
+                            <span class="memory-limit border rounded-3">Xotira: {{ problem.problem.memory_limit }} mb</span>
+                            <span class="difficulty border rounded-3">Qiyinchiligi: {{ problem.problem.difficulty }} %</span>
+                        </div>
+
+                        <p class="problem-description border">
+                            {{ problem.problem.description|safe }}
+                        </p>
+                        <p class="input text-primary">Kiruvchi ma'lumotlar:</p>
+                        <p class="input-data  border-bottom">
+                            {{ problem.problem.input_data|safe }}
+                        </p>
+                        <p class="input text-primary">Chiquvchi ma'lumotlar:</p>
+                        <p class="input-data  border-bottom">
+                            {{ problem.problem.output_data|safe }}
+                        </p>
+                        <p class="input text-primary">Misollar:</p>
+                        <table class="table table-bordered border-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 40px" class="text-center">#</th>
+                                    <th scope="col">input.txt</th>
+                                    <th scope="col">output.txt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for test in problem.problem.sample_test_cases.all %}
+                                    <tr>
+                                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                        <td class="position-relative"><span>{{ test.input|linebreaks }}</span>
+                                            <button class="test-copy"><i class="fal fa-copy"></i></button>
+                                        </td>
+                                        <td class="position-relative"><span>{{ test.output|linebreaks }}</span>
+                                            <button class="test-copy"><i class="fal fa-copy"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        {% if contest.status <= 0 %}
+                            <div class="submit-code">
+                                <form action="">
+                                    <div>
+                                        <select class="form-select" aria-label="Default select example" id="language">
+                                            <option selected>Dasturlash tilini tanlang:</option>
+                                            {% for language in contest.programming_languages.all %}
+                                                <option value="{{ language.id }}">{{ language.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="editor"></label><textarea id="editor" rows="10" cols="50"
+                                                                              class="mt-2"></textarea>
+                                        <button class="submit-btn mt-3 btn btn-primary">Yuborish</button>
+                                    </div>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'assets/js/contest_countdown.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/lib/codemirror.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/mode/python/python.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/mode/clike/clike.js' %}"></script>
+    <script src="{% static 'codemirror-5.65.13/addon/edit/closetag.js' %}"></script>
+    <script>
+        let myeditor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+            mode: '',
+            lineNumbers: true
+        })
+        let languageSelector = document.getElementById('language');
+        let langs_json = {{ langs_json|safe }};
+        languageSelector.addEventListener('change', function () {
+            let selectedLanguage = langs_json[languageSelector.value];
+            let code = ''
+            if (selectedLanguage === 'python') {
+                code = 'python';
+            } else if (selectedLanguage === 'cpp' || selectedLanguage === 'java') {
+                code = 'text/x-csrc';
+            }
+            myeditor.setOption('mode', code);
+        });
+
+        // Countdown timer
+        {% if now < contest.end_date %}
+            window.onload = function () {
+
+                let seconds = {% if contest.status == 0 %}Math.floor({{ contest.end_date.timestamp }})
+                    - Math.floor({{ now.timestamp }})
+                {% else %}Math.floor({{ contest.start_date.timestamp }}) - Math.floor({{ now.timestamp }}){% endif %};
+                console.log(seconds);
+                let display = document.querySelector('#countdown');
+                startTimer(seconds, display);
+            };
+        {% endif %}
+
+    </script>
+
+{% endblock %}
