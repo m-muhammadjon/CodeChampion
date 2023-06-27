@@ -9,6 +9,7 @@ urlpatterns = [
     path("", include("apps.base.urls", namespace="base")),
     path("", include("apps.users.urls", namespace="users")),
     path("", include("apps.problems.urls", namespace="problems")),
+    path("", include("apps.contests.urls", namespace="contests")),
 ]
 urlpatterns += [
     path("ckeditor/", include("ckeditor_uploader.urls")),

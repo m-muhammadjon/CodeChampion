@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Kontestlar{% endblock %}
+{% block content %}
+    <table class="table table-bordered container mt-5">
+        <thead class="bg-blue">
+            <tr>
+                <th scope="col">Nomi</th>
+                <th scope="col">Masalalar soni</th>
+                <th scope="col">Qatnashuvchilar soni</th>
+                <th scope="col">Boshlanish vaqti</th>
+                <th scope="col">Holati</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contest in contests %}
+                <tr>
+                    <td><a href="{{ contest.get_absolute_url }}" class="blue">{{ contest.title }}</a></td>
+                    <td>{{ contest.problems.count }}</td>
+                    <td>{{ contest.participants.count }}</td>
+                    <td>{{ contest.start_date|date:"H:i (d.m.Y)" }}</td>
+                    <td>
+                        {% if contest.status == -1 %}
+                            Boshlanmagan
+                        {% elif contest.status == 1 %}
+                            Tugagan
+                        {% else %}
+                            O'tkazilmoqda
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

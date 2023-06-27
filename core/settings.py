@@ -38,6 +38,7 @@ CUSTOM_APPS = [
     "apps.common",
     "apps.base",
     "apps.problems",
+    "apps.contests",
 ]
 
 THIRD_PARTY_APPS = [
@@ -242,3 +243,5 @@ CELERY_RESULT_BACKEND = env.str("CELERY_BROKER_URL", "redis://localhost:6379")
 CELERY_TIMEZONE = "Asia/Tashkent"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+LOGIN_URL = "users:login"
