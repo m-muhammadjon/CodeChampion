@@ -95,24 +95,12 @@ ASGI_APPLICATION = "core.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
-            "capacity": 1500,
-            "expiry": 10,
-        },
+        "CONFIG": {"hosts": [("localhost", 6379)]},
     },
 }
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     "default": {
         "ENGINE": env.str("DB_ENGINE"),
@@ -179,8 +167,6 @@ DJANGORESIZED_DEFAULT_FORCE_FORMAT = "WEBP"
 DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {"WEBP": ".webp"}
 DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
 
-LOGIN_REDIRECT_URL = "/"
-
 SOCIALACCOUNT_PROVIDERS = {  # noqa
     "google": {
         "SCOPE": [
@@ -198,19 +184,6 @@ SOCIALACCOUNT_PROVIDERS = {  # noqa
         ],
     },
 }
-
-# SOCIAL_AUTH_PIPELINE = (
-#     'social_core.pipeline.user.get_username',
-#     'social_core.pipeline.mail.mail_validation',
-#     'social_core.pipeline.social_auth.social_uid',
-#
-#     'social_core.pipeline.social_auth.associate_user',
-#     'social_core.pipeline.social_auth.load_extra_data',
-#     'social_core.pipeline.user.user_details',
-#     'social_core.pipeline.social_auth.social_details',
-#     'social_core.pipeline.social_auth.auth_allowed',
-#     'social_core.pipeline.social_auth.social_user',
-# )
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",
@@ -245,3 +218,4 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "/"
