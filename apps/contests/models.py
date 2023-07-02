@@ -74,7 +74,7 @@ class ContestProblem(TimeStampedModel):
         unique_together = ["contest", "symbol"]
 
     def get_absolute_url(self):
-        return reverse("contests:contest_problem", args=(self.contest.pk, self.symbol))
+        return reverse("contests:contest_problem_detail", args=(self.contest.pk, self.symbol))
 
 
 class Contestant(TimeStampedModel):
