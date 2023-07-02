@@ -19,13 +19,15 @@
                     <td>{{ contest.participants.count }}</td>
                     <td>{{ contest.start_date|date:"H:i (d.m.Y)" }}</td>
                     <td>
-                        {% if contest.status == -1 %}
-                            Boshlanmagan
-                        {% elif contest.status == 1 %}
-                            Tugagan
-                        {% else %}
-                            O'tkazilmoqda
-                        {% endif %}
+                        <span class="{% if contest.status == -1 %}blue{% elif contest.status == 1 %}wrong{% else %}accepted{% endif %}">
+                            {% if contest.status == -1 %}
+                                Boshlanmagan
+                            {% elif contest.status == 1 %}
+                                Tugagan
+                            {% else %}
+                                O'tkazilmoqda
+                            {% endif %}
+                        </span>
                     </td>
                 </tr>
             {% endfor %}

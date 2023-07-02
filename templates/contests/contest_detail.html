@@ -69,8 +69,7 @@
                                         </td>
                                     </tbody>
                                 </table>
-                                {% if contest.status <= 0 and request.user not in contest.participants %}
-                                    das
+                                {% if request.user.is_authenticated and not user_is_registered %}
                                     <div>
                                         <a href="{{ contest.get_register_contest_url }}"
                                            class="btn btn-primary btn-blue bg-blue">Qatnashish</a>

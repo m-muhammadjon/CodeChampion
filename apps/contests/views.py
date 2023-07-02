@@ -21,6 +21,7 @@ def contest_detail(request: WSGIRequest, pk: int) -> HttpResponse:
             "contest": contest,
             "name": "contests",
             "first_problem": contest.problems.first().symbol,
+            "user_is_registered": contest.user_is_registered(request.user),
             "now": timezone.now(),
         },
     )
