@@ -1,8 +1,9 @@
 from celery import shared_task
+from django.db.models import Sum
 
 from apps.contests.models import (Contestant, ContestantProblemInfo,
                                   ContestProblem)
-from apps.problems.models import Attempt
+from apps.problems.models import Attempt, AttemptVerdictChoices
 from judges import check_cpp
 
 
@@ -35,12 +36,36 @@ def check_attempt(attempt_id: int) -> None:
             contestant_problem_info.points = contest_problem.point
             contestant_problem_info.penalties = (
                 contestant_problem_info.attempt_count * contest.penalty_per_attempt
-                + (attempt.created_at - contest.start_time).total_seconds() // 60
+                + (attempt.created_at - contest.start_date).total_seconds() // 60
             )
-            contestant_problem_info.solved_time = attempt.created_at
+            contestant_problem_info.is_solved = True
+            contestant_problem_info.solved_at = attempt.created_at
 
             # Checks if the user solved the problem first
             if not ContestantProblemInfo.objects.filter(
                 contestant__contest=contest, contest_problem=contest_problem, is_solved=True
             ).exists():
                 contestant_problem_info.is_first_solved = True
+
+        # Calculate contestant problem's attempts count
+        if not contestant_problem_info.is_solved:
+            contestant_problem_info.attempt_count = contest.attempts.filter(
+                user=attempt.user, problem=contest_problem.problem
+            ).count()
+        contestant_problem_info.save()
+
+        contestant.total_penalties = contestant.problem_infos.aggregate(total_penalty=Sum("penalties"))["total_penalty"]
+        contestant.total_points = contestant.problem_infos.aggregate(total_points=Sum("points"))["total_points"]
+        contestant.save()
+
+        contest_problem.attempted_users_count = (
+            contest.attempts.filter(problem=contest_problem.problem).order_by("user").distinct("user").count()
+        )
+        contest_problem.solved_users_count = contestant.problem_infos.filter(
+            contest_problem=contest_problem, is_solved=True
+        ).count()
+        contest_problem.total_attempts_count = contest.attempts.filter(problem=contest_problem.problem).count()
+        contest_problem.total_accepted_count = contest.attempts.filter(
+            problem=contest_problem.problem, verdict=AttemptVerdictChoices.accepted
+        ).count()
+        contest_problem.save()
