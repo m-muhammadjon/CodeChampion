@@ -69,3 +69,19 @@ def submit_contest_problem(request: WSGIRequest, pk: int, symbol: str) -> HttpRe
         return redirect(contest_problem.contest.get_absolute_url())
     print(form.errors)
     return HttpResponse("okay")
+
+
+def contest_standings(request: WSGIRequest, pk: int) -> HttpResponse:
+    contest = Contest.objects.get(pk=pk)
+    contestants = contest.contestants.all().order_by("-total_points", "total_penalties")
+    problems = contest.problems.all()
+    return render(
+        request,
+        "contests/contest_standings.html",
+        {
+            "contest": contest,
+            "name": "contests",
+            "contestants": contestants,
+            "problems": problems,
+        },
+    )

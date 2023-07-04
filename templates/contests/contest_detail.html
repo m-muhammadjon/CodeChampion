@@ -12,7 +12,8 @@
                                 <a href="#" class="btn btn-outline-primary active">Musobaqa</a>
                                 <a href="{% url 'contests:contest_problem_detail' contest.pk first_problem %}"
                                    class="btn btn-outline-primary ">Masalalar</a>
-                                <a href="" class="btn btn-outline-primary ">Natijalar</a>
+                                <a href="{% url 'contests:contest_standings' contest.pk %}"
+                                   class="btn btn-outline-primary ">Natijalar</a>
                                 <a href="" class="btn btn-outline-primary ">Urinishlar</a>
                                 <a href="" class="btn btn-outline-primary ">Qatnashuvchilar</a>
                             </div>
