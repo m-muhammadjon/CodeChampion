@@ -113,8 +113,14 @@ class Attempt(TimeStampedModel):
     verdict = models.CharField(_("verdict"), max_length=32, choices=AttemptVerdictChoices.choices, default="waiting")
     time = models.PositiveIntegerField(_("time"), default=0)
     memory = models.PositiveIntegerField(_("memory"), default=0)
-    # contest = models.ForeignKey("contests.Contest", on_delete=models.CASCADE, related_name="attempts",
-    #                             verbose_name=_("contest"), null=True, blank=True)
+    contest = models.ForeignKey(
+        "contests.Contest",
+        on_delete=models.CASCADE,
+        related_name="attempts",
+        verbose_name=_("contest"),
+        null=True,
+        blank=True,
+    )
     error = models.TextField(_("error"), null=True, blank=True)
     error_test_case = models.PositiveIntegerField(_("error test case"), default=0)
     is_checked = models.BooleanField(_("is checked"), default=False)

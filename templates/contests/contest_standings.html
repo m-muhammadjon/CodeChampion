@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Natijalar{% endblock %}
+{% block content %}
+    <div class="container mb-5">
+        <div class="row main">
+            <div class="col-lg-12">
+                <div class="mt-5 mb-4">
+                    <div class="contest">
+                        <div class="mb-2 d-flex justify-content-between">
+                            <div class="btn-group contest-navbar" role="group" aria-label="Basic outlined example">
+                                <a href="{{ contest.get_absolute_url }}" class="btn btn-outline-primary ">Musobaqa</a>
+                                <a href="{% url 'contests:contest_problem_detail' contest.pk contest.problems.first.symbol %}"
+                                   class="btn btn-outline-primary ">Masalalar</a>
+                                <a href="" class="btn btn-outline-primary active">Natijalar</a>
+                                <a href="./contest_attempts.html" class="btn btn-outline-primary ">Urinishlar</a>
+                                <a href="./contest_users.html" class="btn btn-outline-primary ">Qatnashuvchilar</a>
+                            </div>
+
+                            <div><i class="fa-light fa-clock fa-fade"></i> <span>01:15:23</span></div>
+                        </div>
+                        <div class="standings mb-3" style="overflow-x: scroll;">
+                            <table class="table mt-3 table-blue standings-table" style="width: max-content;">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th>#</th>
+                                        <th style="max-width: 250px; min-width: 250px">Foydalanuvchi</th>
+                                        <th style="width: 35px"><i class="fa-light fa-ballot-check"></i></th>
+                                        <th>Ball</th>
+                                        <th>Jarima</th>
+                                        {% for problem in problems %}
+                                            <th class="text-center" style="width: 100px!important;">
+                                                <a href="{{ problem.get_absolute_url }}"
+                                                   class="text-white problem-standing">{{ problem.symbol }}</a>
+                                            </th>
+                                        {% endfor %}
+
+                                    </thead>
+                                    <tbody>
+                                        {% for contestant in contestants %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td class="align-center">{{ contestant.user.username }}</td>
+                                                <td>N/A</td>
+                                                <td>{{ contestant.total_points }}</td>
+                                                <td>{{ contestant.total_penalties }}</td>
+                                                {% for problem_info in contestant.problem_infos.all %}
+                                                    <td {% if problem_info.is_first_solved %}class="first-solved"{% endif %}>
+                                                        <div class="d-flex flex-column align-items-center justify-content-center">
+                                                            <span class="{% if problem_info.get_clean_solved_time %}accepted{% else %}wrong{% endif %}">{{ problem_info.get_clean_attempts_count }}</span>
+                                                            <p class="time">{{ problem_info.get_clean_solved_time }}</p>
+                                                        </div>
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                <!-- Stats -->
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            {% for problem in problems %}
+                                                <td class="text-center">
+                                                    <span class="accepted">{{ problem.solved_users_count }}</span>/<span
+                                                        class="wrong">A</span>/<span
+                                                            class="blue">{{ problem.total_attempts_count }}</span>
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav aria-label="...">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Previous</span>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active">
+                                        <span class="page-link">
+                                            2
+                                            <span class="sr-only">(current)</span>
+                                        </span>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+{% endblock %}
